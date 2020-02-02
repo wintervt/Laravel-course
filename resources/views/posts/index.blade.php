@@ -14,14 +14,18 @@
 				<p>No comments yet</p>
 			@endif	
 
-			<a class="btn btn-primary" href="{{ route('posts.edit', ['post' =>$post->id]) }}">Edit</a>
+			@can('update', $post)
+			 <a class="btn btn-primary" href="{{ route('posts.edit', ['post' =>$post->id]) }}">Edit</a>
+			@endcan
 
+			@can('delete', $post)
 			<form class="fm-inline" action="{{ route('posts.destroy', ['post' => $post->id]) }}" method='post'>
 			@csrf
 			@method('DELETE')
 
 			<input type="submit" value="Delete!" class="btn btn-danger">
 			</form>
+			@endcan
 
 		</p>
 	@empty

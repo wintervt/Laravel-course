@@ -6,6 +6,7 @@ use App\BlogPost;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePost;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -56,6 +57,8 @@ class PostController extends Controller
 
      public function create()
     {
+       // $this->authorize('posts.create');
+
        return view('posts.create');
     }
 
@@ -73,12 +76,23 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = BlogPost::findOrFail($id);
+
+        // if (Gate::denies('update-post', $post)) {
+        //     abort(403, "You can't edit this blogpost!");
+        // };
+        // instead of defining a Gate like above use below shorthand:
+         $this->authorize('update', $post);
+
         return view('posts.edit', ['post' => $post]);
     }
 
     public function update(StorePost $request, $id)
     {
+
         $post = BlogPost::findOrFail($id);
+
+       $this->authorize('update', $post);
+
         $validatedData = $request->validated();
 
         $post->fill($validatedData);
@@ -90,6 +104,12 @@ class PostController extends Controller
     public function destroy(Request $request, $id)
     {
         $post = BlogPost::findOrFail($id);
+
+        // if (Gate::denies('delete-post', $post)) {
+        //     abort(403, "You can't delete this blogpost!");
+        // };
+        $this->authorize('delete', $post);
+
         $post->delete();
 
         $request->session()->flash('status', 'Blog post was deleted!');

@@ -17,21 +17,27 @@ class HomeController extends Controller
     	return view('contact');
     }
 
-    public function blogPost($id, $welcome = 1)
+    public function secret()
     {
-    	$pages = [
-			1 => [
-				'title' => 'Hello from page 1'
-			],
-			2 => [
-				'title' => 'Hello from page 2'
-			],
-		];
-		$welcomes = [1 => 'Hello', 2 => 'Welcome to '];
-
-		return view('blog-post', ['data' => $pages[$id],
-		 'welcome' => $welcomes[$welcome],
-		]);
+        return view('secret');
     }
+
+
+  //   public function blogPost($id, $welcome = 1)
+  //   {
+  //   	$pages = [
+		// 	1 => [
+		// 		'title' => 'Hello from page 1'
+		// 	],
+		// 	2 => [
+		// 		'title' => 'Hello from page 2'
+		// 	],
+		// ];
+		// $welcomes = [1 => 'Hello', 2 => 'Welcome to '];
+
+		// return view('blog-post', ['data' => $pages[$id],
+		//  'welcome' => $welcomes[$welcome],
+		// ]);
+  //   }
 
 }
