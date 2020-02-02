@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StorePost;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -74,11 +75,20 @@ class PostController extends Controller
 
        if ($hasFile) {
         $file = $request->file('thumbnail');
-        dump($file);
-        dump($file->getClientMimeType());
-        dump($file->getClientOriginalExtension());
+        // dump($file);
+        // dump($file->getClientMimeType());
+        // dump($file->getClientOriginalExtension());
 
-        $file->store('thumbnails');
+        // $file->store('thumbnails');
+
+        // dump(Storage::disk('public')->putFile('thumbnails', $file));
+         //below are the same
+         $name1 = $file->storeAs('thumbnail', $blogPost->id .'.'. $file->guessExtension());
+         $name2 = Storage::putFileAs('thumbnail', $file, $blogPost->id .'.'. $file->guessExtension());
+
+         dump(Storage::url($name1));
+         dump(Storage::url($name2));
+
        }    
        die;
        
