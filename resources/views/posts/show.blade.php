@@ -7,7 +7,7 @@
 	
  	<p>{{ $post->content }}</p>
 
-	
+	<img src="{{ Storage::url($post->image->path) }}" alt="">
 
  	<h4>Comments</h4>
 

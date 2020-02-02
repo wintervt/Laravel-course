@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\BlogPost;
+use App\Image;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePost;
 use Illuminate\Support\Facades\DB;
@@ -70,29 +71,13 @@ class PostController extends Controller
 
        $blogPost = BlogPost::create($validatedData);
 
-       $hasFile = $request->hasFile('thumbnail');
-       dump($hasFile);
-
-       if ($hasFile) {
-        $file = $request->file('thumbnail');
-        // dump($file);
-        // dump($file->getClientMimeType());
-        // dump($file->getClientOriginalExtension());
-
-        // $file->store('thumbnails');
-
-        // dump(Storage::disk('public')->putFile('thumbnails', $file));
-         //below are the same
-         $name1 = $file->storeAs('thumbnail', $blogPost->id .'.'. $file->guessExtension());
-         $name2 = Storage::putFileAs('thumbnail', $file, $blogPost->id .'.'. $file->guessExtension());
-
-         dump(Storage::url($name1));
-         dump(Storage::url($name2));
-
+       if ($request->hasFile('thumbnail')) {
+        $path = $request->file('thumbnail')->store('thumbnails');
+        $blogPost->image()->save(
+            Image::create(["path" => $path])
+        );
        }    
-       die;
        
-
        $request->session()->flash('status', 'Blog post was created!');
 
        return redirect()->route('posts.show', ['post' => $blogPost->id]);
