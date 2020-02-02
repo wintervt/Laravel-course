@@ -65,8 +65,23 @@ class PostController extends Controller
     public function store(StorePost $request)
     {
        $validatedData = $request->validated();
+       $validatedData['user_id'] = $request->user()->id;
 
        $blogPost = BlogPost::create($validatedData);
+
+       $hasFile = $request->hasFile('thumbnail');
+       dump($hasFile);
+
+       if ($hasFile) {
+        $file = $request->file('thumbnail');
+        dump($file);
+        dump($file->getClientMimeType());
+        dump($file->getClientOriginalExtension());
+
+        $file->store('thumbnails');
+       }    
+       die;
+       
 
        $request->session()->flash('status', 'Blog post was created!');
 
