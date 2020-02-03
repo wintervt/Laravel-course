@@ -40,7 +40,7 @@ class PostController extends Controller
         //will create comments_count property
 
        return view('posts.index',
-            ['posts' => BlogPost::withCount('comments')->get()]);
+            ['posts' => BlogPost::latest()->withCount('comments')->get()]);
     }
 
     /**
