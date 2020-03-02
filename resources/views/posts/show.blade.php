@@ -3,7 +3,13 @@
 @section('content')
  	<h1>{{ $post->title }}</h1>
 
-	<p>Added {{ $post->created_at->diffForHumans() }}</p>
+	 @updated(['date' => $post->created_at, 'name' => $post->user->name ])
+	 @endupdated
+
+	 @tags(['tags' => $post->tags])
+	 @endtags
+
+	 <p>Currently read by {{ $counter }} people</p>
 	
  	<p>{{ $post->content }}</p>
 
