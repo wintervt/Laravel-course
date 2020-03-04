@@ -28,25 +28,11 @@ class PostController extends Controller
     public function index()
     {
 
-        $mostCommented = Cache::remember('blog-post-commented', 60, function() {
-            return BlogPost::mostCommented()->take(5)->get();
-        });
-
-        $mostActive = Cache::remember('users-most-active', 60, function() {
-            return User::withMostBlogPosts()->take(5)->get();
-        });
-
-        $mostActiveLastMonth = Cache::remember('isers-most-active-last-month', 60, function() {
-            return User::withMostBlogPostsLastMonth()->take(5)->get();
-        });
 
        return view(
                     'posts.index',
                      [
                         'posts' => BlogPost::latest()->withCount('comments')->with('user')->with('tags')->get(),
-                        'mostCommented' => $mostCommented,
-                        'mostActive' =>  $mostActive,
-                        'mostActiveLastMonth' => $mostActiveLastMonth,
                      ]
                   );
     }
