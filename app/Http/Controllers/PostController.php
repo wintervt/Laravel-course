@@ -32,7 +32,7 @@ class PostController extends Controller
        return view(
                     'posts.index',
                      [
-                        'posts' => BlogPost::latest()->withCount('comments')->with('user')->with('tags')->get(),
+                        'posts' => BlogPost::latestWithRelations()->get(),
                      ]
                   );
     }
@@ -47,7 +47,7 @@ class PostController extends Controller
     {
 
         $blogPost = Cache::remember("blog-posts-{$id}", 60, function() use ($id) {
-            return BlogPost::with('comments')->with('tags')->findOrFail($id);
+            return BlogPost::with('comments','tags','user','comments.user')->findOrFail($id);
         });
 
         $sessionId = session()->getId();
@@ -140,6 +140,21 @@ class PostController extends Controller
         $validatedData = $request->validated();
 
         $post->fill($validatedData);
+
+        if ($request->hasFile('thumbnail')) {
+        $path = $request->file('thumbnail')->store('thumbnails');
+
+        if ($post->image) {
+            Storage::delete($post->image->path);
+            $post->image->path = $path;
+            $post->image->save();
+        } else {
+        $blogPost->image()->save(
+            Image::create(["path" => $path])
+            );
+         }
+       }    
+
         $post->save();
         $request->session()->flash('status', 'Blog post was updated!');
         return redirect()->route('posts.show', ['post' => $post->id]);

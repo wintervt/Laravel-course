@@ -4,6 +4,13 @@
 
 <div class="row">
 	<div class="col-8">
+
+		@if($post->image)
+			<img class="img-fluid" src="{{ $post->image->url() }}" alt="">
+		@else
+			
+		@endif
+
 		 <h1>{{ $post->title }}</h1>
 
 		 @updated(['date' => $post->created_at, 'name' => $post->user->name ])
@@ -16,14 +23,18 @@
 		
 	 	<p>{{ $post->content }}</p>
 
-		 {{-- <img src="{{ $post->image->url }}" alt="">  --}}
 
 	 	<h4>Comments</h4>
+
+	 	@include('comments._form')
 
 	 	@forelse($post->comments as $comment)
 			
 			<p>{{ $comment->content }},</p>
-			<p class="text-muted">Added {{ $comment->created_at->diffForHumans() }}</p>
+			
+
+		 @updated(['date' => $comment->created_at, 'name' => $comment->user->name ])
+		 @endupdated
 
 	 	@empty
 	 	<p>No comments yet!</p>
