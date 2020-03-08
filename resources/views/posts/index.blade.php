@@ -19,7 +19,7 @@
 				{{-- <p class="text-muted">Added {{  $post->created_at->diffForHumans() }}
 				 by {{ $post->user->name }}</p>
  --}}
-				 @updated(['date' => $post->created_at, 'name' => $post->user->name ])
+				 @updated(['date' => $post->created_at, 'name' => $post->user->name, 'userId' => $post->user->id ])
 				 @endupdated
 
 				 @tags(['tags' => $post->tags])

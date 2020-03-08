@@ -32,7 +32,7 @@ class PostController extends Controller
        return view(
                     'posts.index',
                      [
-                        'posts' => BlogPost::latestWithRelations()->get(),
+                        'posts' => BlogPost::latestWithRelation()->get(),
                      ]
                   );
     }
@@ -108,7 +108,7 @@ class PostController extends Controller
        if ($request->hasFile('thumbnail')) {
         $path = $request->file('thumbnail')->store('thumbnails');
         $blogPost->image()->save(
-            Image::create(["path" => $path])
+            Image::make(["path" => $path])
         );
        }    
        
@@ -149,10 +149,10 @@ class PostController extends Controller
             $post->image->path = $path;
             $post->image->save();
         } else {
-        $blogPost->image()->save(
-            Image::create(["path" => $path])
-            );
-         }
+            $post->image()->save(
+                Image::make(["path" => $path])
+                );
+          }
        }    
 
         $post->save();
